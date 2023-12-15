@@ -1,51 +1,78 @@
 const EventModel = require('../models/events')
 
 
-// const getAllEvent = async (req, res) =>{
-//   try {
-//     const [data] = await EventModel.getAllEvent();
-
-//   res.json({
-//     message: 'GET event success',
-//     data: data
-//   })
-//   } catch (error) {
-//     res.status(500).json({
-//       message: error,
-//     })
-//   }
-// }
-
-
-const getAllEvent = async (req, res) => {
+const getAllEvent = async (req, res) =>{
   try {
     const [data] = await EventModel.getAllEvent();
 
-    if (data) {
-      console.log('Data from model:', data);
-
-      res.json({
-        message: 'GET event success',
-        data: {
-          ...data,
-          price: data.price || 0,
-          stock: data.stock || 0,
-        },
-      });
-    } else {
-      res.json({
-        message: 'No events found',
-        data: null,
-      });
-    }
+  res.json({
+    message: 'GET event success',
+    data: data
+  })
   } catch (error) {
     res.status(500).json({
-      message: 'Internal Server Error',
-      error: error.message,
-    });
+      message: error,
+    })
   }
 }
 
+
+// const getAllEvent = async (req, res) => {
+//   try {
+//     const [data] = await EventModel.getAllEvent();
+
+//     if (data) {
+//       // console.log('Data from model:', data);
+
+//       res.json({
+//         message: 'GET event success',
+//         data: {
+//           ...data,
+//           price: data.price || 0,
+//           stock: data.stock || 0,
+//         },
+//       });
+//     } else {
+//       res.json({
+//         message: 'No events found',
+//         data: null,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       message: 'Internal Server Error',
+//       error: error.message,
+//     });
+//   }
+// }
+
+const getEventByCategory = async (req, res) => {
+  const { idCategory } = req.params;
+
+  try {
+    const [data] = await EventModel.getEventByCategory(idCategory);
+
+    if (data.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: 'Get events by category success',
+        data,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Events not found for the specified category',
+      });
+    }
+  } catch (error) {
+    console.error('Error getting events by category:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message,
+    });
+  }
+};
 
 
 
@@ -135,5 +162,6 @@ module.exports = {
   getAllEvent,
   createNewEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  getEventByCategory
 }

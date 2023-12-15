@@ -11,6 +11,9 @@ router.post('/', EventController.createNewEvent)
 // READ - GET
 router.get('/', EventController.getAllEvent)
 
+router.get('/:idCategory', EventController.getEventByCategory)
+
+
 // UPDATE - PATCH
 router.patch('/:idEvent', EventController.updateEvent)
 
