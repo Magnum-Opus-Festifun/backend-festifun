@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/users");
-const eoRoutes = require("./routes/eo");
 const eventRoutes = require("./routes/events");
 const loginRoutes = require("./routes/login");
 const middlewareLogRequest = require('./middleware/logs');
@@ -18,7 +17,6 @@ app.use(express.json());
 app.use('/assets', express.static('public/images'))
 
 app.use("/users", userRoutes);
-app.use("/eo", eoRoutes);
 app.use("/events", eventRoutes);
 app.use("/login", loginRoutes);
 

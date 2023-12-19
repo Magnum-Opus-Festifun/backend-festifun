@@ -58,7 +58,7 @@ const loginUser = async (email, password) => {
       const passwordMatch = await bcrypt.compare(password, hashedPassword);
 
       if (passwordMatch) {
-        const token = generateToken(userData[0]); // Gunakan fungsi generateToken dari middleware/token.js
+        const token = generateToken(userData[0]);
         return {
           success: true,
           message: 'Login successful',
@@ -66,21 +66,28 @@ const loginUser = async (email, password) => {
             id: userData[0].userID,
             email: userData[0].email,
             role: role,
-            token: token, // Sertakan token dalam respons
+            token: token,
           },
         };
       } else {
-        // Jika password tidak cocok, kembalikan null atau sesuai kebutuhan
-        return null;
+        // Password doesn't match
+        return {
+          success: false,
+          message: 'Password Anda salah.',
+        };
       }
     }
 
-    // Jika email tidak ditemukan, kembalikan null atau sesuai kebutuhan
-    return null;
+    // Email not found
+    return {
+      success: false,
+      message: 'Email belum terdaftar.',
+    };
   } catch (error) {
     throw error;
   }
 };
+
 
 
 

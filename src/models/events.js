@@ -8,9 +8,9 @@ const getAllEvent = () => {
       events.image,
       events.description,
       events.location,
-      events.date,
-      events.timeStart,
-      events.timeEnd,
+      events.dateStart,
+
+      events.dateEnd,
       tickets.price,
       tickets.stock,
       GROUP_CONCAT(DISTINCT event_categories.categoryID) AS categoryIDs,
@@ -25,9 +25,9 @@ const getAllEvent = () => {
       events.image,
       events.description,
       events.location,
-      events.date,
-      events.timeStart,
-      events.timeEnd,
+      events.dateStart,
+
+      events.dateEnd,
       tickets.price,
       tickets.stock;
   `;
@@ -43,9 +43,9 @@ const getEventByCategory = (idCategory) => {
       events.image,
       events.description,
       events.location,
-      events.date,
-      events.timeStart,
-      events.timeEnd,
+      events.dateStart,
+  
+      events.dateEnd,
       tickets.price,
       tickets.stock,
       GROUP_CONCAT(DISTINCT categories.name) AS categoryNames
@@ -60,9 +60,9 @@ const getEventByCategory = (idCategory) => {
       events.image,
       events.description,
       events.location,
-      events.date,
-      events.timeStart,
-      events.timeEnd,
+      events.dateStart,
+  
+      events.dateEnd,
       tickets.price,
       tickets.stock;
   `;
@@ -76,17 +76,16 @@ const createNewEvent = async (body) => {
   try {
     await connection.beginTransaction();
 
-    const eventSQL = `INSERT INTO events (name, image, description, location, date, timeStart, timeEnd)
-                      VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const eventSQL = `INSERT INTO events (name, image, description, location, dateStart, dateEnd)
+                      VALUES (?, ?, ?, ?, ?, ?)`;
 
     const [eventResult] = await connection.execute(eventSQL, [
-      body.name,
-      body.image,
-      body.description,
-      body.location,
-      body.date,
-      body.timeStart,
-      body.timeEnd,
+      body.name || null,
+      body.image || null,
+      body.description || null,
+      body.location || null,
+      body.dateStart || null,
+      body.dateEnd || null,
     ]);
 
     if (eventResult.affectedRows > 0) {
@@ -137,7 +136,7 @@ const createNewEvent = async (body) => {
 };
 
 const updateEvent = (body, idEvent) => {
-  const SQLQuery = `UPDATE events SET name='${body.name}', image='${body.image}',description='${body.description}', location='${body.location}', date='${body.date}', timeStart='${body.timeStart}', timeEnd='${body.timeEnd}' WHERE eventID=${idEvent}`;
+  const SQLQuery = `UPDATE events SET name='${body.name}', image='${body.image}',description='${body.description}', location='${body.location}', dateStart='${body.dateStart}', dateEnd='${body.dateEnd}' WHERE eventID=${idEvent}`;
 
   return dbPool.execute(SQLQuery);
 };

@@ -116,42 +116,46 @@ const loginUser = async (req, res) => {
   try {
     const userData = await UserModel.loginUser(email, password);
 
+    if (userData == null) {
+      return res.status(404).json({
+        success: false,
+        message: 'Email belum terdaftar.',
+      });
+    }
+
     if (!userData.success) {
-      return res.status(401).json(userData);
+      if (userData.message.includes('Incorrect password')) {
+        return res.status(401).json({
+          success: false,
+          message: 'Password Anda salah.',
+        });
+      } else {
+        // Handle other error cases
+        return res.status(500).json({
+          success: false,
+          message: 'Terjadi kesalahan. Silakan coba lagi.',
+          error: userData.message,
+        });
+      }
     }
 
     const { role } = userData.data;
 
-    if (role === 'user') {
-      return res.status(200).json({
-        success: true,
-        message: 'Login user success',
-        data: userData.data,
-      });
-    }
-
-    if (role === 'eo') {
-      return res.status(200).json({
-        success: true,
-        message: 'Login EO success',
-        data: userData.data,
-      });
-    }
-
     return res.status(200).json({
       success: true,
-      message: 'Login success',
+      message: role === 'user' ? 'Login user success' : 'Login EO success',
       data: userData.data,
     });
   } catch (error) {
     console.error('Error during login:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: 'Internal Server Error',
+      message: 'Terjadi kesalahan. Silakan coba lagi.',
       error: error.message,
     });
   }
 };
+
 
 
 module.exports = {
