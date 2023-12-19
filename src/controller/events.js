@@ -155,6 +155,35 @@ const deleteEvent = async (req, res) => {
 };
 
 
+const getEventByName = async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    const [data] = await EventModel.getEventByName(name);
+
+    if (data.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: 'Get events by name success',
+        data,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Events not found for the specified name',
+      });
+    }
+  } catch (error) {
+    console.error('Error getting events by name:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message,
+    });
+  }
+};
+
+
 
 
 
@@ -163,5 +192,6 @@ module.exports = {
   createNewEvent,
   updateEvent,
   deleteEvent,
-  getEventByCategory
+  getEventByCategory,
+  getEventByName
 }

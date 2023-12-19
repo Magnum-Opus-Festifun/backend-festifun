@@ -1,5 +1,6 @@
 const dbPool = require("../config/database");
 
+
 const getAllEvent = () => {
   const SQLQuery = `
     SELECT
@@ -179,10 +180,48 @@ const deleteEvent = async (idEvent) => {
   }
 };
 
+
+const getEventByName = (name) => {
+  const SQLQuery = `
+    SELECT
+      events.eventID,
+      events.name,
+      events.image,
+      events.description,
+      events.location,
+      events.dateStart,
+      events.dateEnd,
+      tickets.price,
+      tickets.stock,
+      GROUP_CONCAT(DISTINCT event_categories.categoryID) AS categoryIDs,
+      GROUP_CONCAT(DISTINCT categories.name) AS categoryNames
+    FROM events
+    INNER JOIN event_categories ON events.eventID = event_categories.eventID
+    INNER JOIN tickets ON events.eventID = tickets.eventID
+    INNER JOIN categories ON event_categories.categoryID = categories.categoryID
+    WHERE events.name LIKE ?
+    GROUP BY
+      events.eventID,
+      events.name,
+      events.image,
+      events.description,
+      events.location,
+      events.dateStart,
+      events.dateEnd,
+      tickets.price,
+      tickets.stock;
+  `;
+
+  return dbPool.execute(SQLQuery, [`%${name}%`]);
+};
+
+
+
 module.exports = {
   getAllEvent,
   createNewEvent,
   updateEvent,
   deleteEvent,
   getEventByCategory,
+  getEventByName,
 };

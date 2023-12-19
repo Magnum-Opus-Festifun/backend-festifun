@@ -20,5 +20,7 @@ router.patch('/:idEvent', EventController.updateEvent)
 // DELETE - DELETE
 router.delete('/:idEvent', EventController.deleteEvent)
 
+router.get('/searchByName', EventController.getEventByName);
+
 
 module.exports = router;

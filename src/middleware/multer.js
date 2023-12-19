@@ -1,24 +1,22 @@
 const multer = require('multer');
-const path = require('path');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) =>{
-    cb(null, 'public/images');
-  },
-  filename: (req, file, cb) =>{
-    const timestamp = new Date().getTime();
-    const originalname = file.originalname;
+const storage = multer.memoryStorage();
 
-    cb(null, `${timestamp}-${originalname}`);
-  }
-})
-
-const upload = multer ({
+const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 3 * 1000 * 1000 // 3 MB
+    fileSize: 3 * 1024 * 1024, // 3 MB
+  },
+}).single('file');
+
+const handleFileUpload = (req, res, next) => {
+  if (!req.file) {
+    console.error('No file uploaded:', req.file);
+    return res.status(400).json({ success: false, message: 'No file uploaded' });
   }
-})
 
+  console.log('File uploaded successfully:', req.file);
+  next();
+};
 
-module.exports = upload;
+module.exports = { upload, handleFileUpload };
