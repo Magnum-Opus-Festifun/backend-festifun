@@ -15,7 +15,7 @@ const uploadToDrive = async (fileBuffer, fileName) => {
   try {
     const fileMetadata = {
       name: fileName,
-      parents: ["13-PdSlVhh3vXXUPqZ7-yPhZt_V0iN3zp"],
+      parents: [""],
     };
 
     const media = {
