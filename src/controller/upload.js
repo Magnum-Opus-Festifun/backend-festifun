@@ -21,7 +21,7 @@ const uploadToDrive = async (req, res) => {
 
     const fileMetadata = {
       name: fileName,
-      parents: ['13-PdSlVhh3vXXUPqZ7-yPhZt_V0iN3zp'], // Ganti dengan ID folder Google Drive Anda
+      parents: [''], // Ganti dengan ID folder Google Drive Anda
     };
 
     const media = {
